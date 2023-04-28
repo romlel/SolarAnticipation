@@ -5,8 +5,14 @@ const app = express()
 
 require('dotenv').config()
 const mysql = require('mysql2')
-const connection = mysql.createConnection(process.env.DATABASE_URL)
-console.log('Connected to PlanetScale!')
+const connection = mysql.createConnection(process.env.DATABASE_URL);
+
+
+console.log('Connected to PlanetScale!');
+connection.query(`SELECT table_name FROM information_schema.tables WHERE table_schema = 'solarpunk0'`, function(err, tables){ 
+  console.log(tables);
+});
+
 connection.end()
 
 
