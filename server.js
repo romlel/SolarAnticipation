@@ -3,6 +3,13 @@ const express = require('express')
 const path = require("path");
 const app = express()
 
+require('dotenv').config()
+const mysql = require('mysql2')
+const connection = mysql.createConnection(process.env.DATABASE_URL)
+console.log('Connected to PlanetScale!')
+connection.end()
+
+
 // #############################################################################
 // This configures static hosting for files in /public that have the extensions
 // listed in the array.
