@@ -86,9 +86,11 @@ async function insertData() {
 }
 
 
-app.get('/do', (req, res) => {
+app.get('/do', async (req, res) => {
+  console.log('Got do');
   
-  insertData();
+  await insertData();
   res.json({});
+  console.log('ok  do');
 });
 
