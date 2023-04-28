@@ -6,15 +6,14 @@ const app = express()
 const http = require('https');
 
 require('dotenv').config()
-const mysql = require('mysql2')
-const connection = mysql.createConnection(process.env.DATABASE_URL);
+const mysql = require('mysql2/promise')
 
 var url = 'https://api.forecast.solar/estimate/49.3898408/2.9431103/35/0/3?time=utc';
-
+/*
 console.log('Connected to PlanetScale!');
 connection.query(`SELECT table_name FROM information_schema.tables WHERE table_schema = 'solarpunk0'`, function(err, tables){ 
   console.log(tables);
-});
+});*/
 
 //connection.end()
 
@@ -64,6 +63,7 @@ async function fetchData(url) {
 }
 
 async function insertData() {
+  connection = await mysql.createConnection(process.env.DATABASE_URL);
   try {  
     const response = await fetchData(url, foptions);
 
@@ -74,7 +74,7 @@ async function insertData() {
 
     //  const values = Object.values(data);
       const query = "INSERT INTO Anticipation (captured, concerns, forecasted, val) VALUES (DATE_FORMAT(now(), '%Y-%m-%d %H:00:00'), '" + el + "', TIMESTAMPDIFF(SECOND, DATE_FORMAT(now(), '%Y-%m-%d %H:00:00'), '"+el+"'),'" + response.result.watts[el]+"')";
-      connection.query(query);
+      await connection.query(query);
   
     }
 
