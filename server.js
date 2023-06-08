@@ -94,3 +94,19 @@ app.get('/do', async (req, res) => {
   console.log('ok  do');
 });
 
+
+app.get('/data/:offset', async (req, res) => {
+  var a = req.query.offset;
+  try {
+    // Make the MySQL query and obtain the result
+  connection = await mysql.createConnection(process.env.DATABASE_URL);
+
+    const [rows, fields] = await connection.execute('select * from Anticipation');
+
+    // Return the planet size data as a JSON response
+    res.json(rows);
+  } catch (error) {
+    console.log(error);
+    res.status(500).send('An error occurred while fetching planet size data.');
+  }
+});
